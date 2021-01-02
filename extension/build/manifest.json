@@ -1,0 +1,11 @@
+{
+  "name": "timetracker",
+  "version": "1.0",
+  "description": "A fancy timer.",
+  "permissions": ["<all_urls>", "activeTab", "declarativeContent", "storage", "webNavigation", "webRequest"],
+  "browser_action": {
+      "default_popup": "index.html"
+  },
+  "content_security_policy": "script-src 'self' 'sha256-Q5CNzN7ohvec6T6Ai2cttuNsXe7E3V3yJMiEjIxRWU0='; object-src 'self'",
+  "manifest_version": 2
+}
