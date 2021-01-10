@@ -2,9 +2,14 @@
   "name": "timetracker",
   "version": "1.0",
   "description": "A fancy timer.",
-  "permissions": ["<all_urls>", "activeTab", "declarativeContent", "storage", "webNavigation", "webRequest"],
+  "permissions": ["<all_urls>", "alarms", "cookies", "declarativeContent", "identity", "tabs", "storage", "webNavigation", "webRequest"],
+  "background": {
+    "scripts": ["background/background.js"],
+    "persistent": true
+  },
   "browser_action": {
       "default_popup": "index.html"
   },
+  "content_security_policy": "script-src 'self' 'sha256-3/40JP/01iE9MeReNLCNles+2Dd466XGZVgURL6MRJM='; object-src 'self'",
   "manifest_version": 2
 }

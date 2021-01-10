@@ -1,6 +1,7 @@
 var keys = require('../keys.json')
 const {OAuth2Client} = require('google-auth-library');
 const client = new OAuth2Client(keys.client_id)
+const clientExtension = new OAuth2Client(keys.client_id_extension)
 
 var routes = function(User) {
     var verifysignup = async function(req, res) {
@@ -43,6 +44,35 @@ var routes = function(User) {
         const ticket = await client.verifyIdToken({
             idToken: req.body.tokenId,
             audience: keys.client_id
+        })
+
+        const payload = ticket.getPayload()
+        if (!payload) {
+            // TODO: need to redirect somewhere with error...?
+            console.log("getPayload() failed.")
+            res.json({message: "error"})
+        } else {
+            User.find({email: payload.email}, function(err, resp) {
+                if (err) {
+                    console.log(err)
+                    res.json({message: "error"})
+                } else {
+                    if (resp.length == 0) {
+                        res.json({message: 'User does not exist'})
+                    } else {
+                        req.session.user = payload.email
+                        res.json({message: "Success"})
+                    }
+                }
+            })
+
+        }
+    }
+
+    var verifyloginextension = async function(req, res) {
+        const ticket = await clientExtension.verifyIdToken({
+            idToken: req.body.tokenId,
+            audience: keys.client_id_extension
         })
 
         const payload = ticket.getPayload()
@@ -119,9 +149,8 @@ var routes = function(User) {
                         res.json({message: "Incorrect password"})
                     } else {
                         req.session.user = email
-                        res.json({message: "Success"})
+                        res.json({message: "Success", user: email})
                     }
-                    
                 }
             }
         })
@@ -129,15 +158,16 @@ var routes = function(User) {
 
     var checkauth = function(req, res) {
         if (req.session.user) {
-            res.send(req.session.user)
+            res.json({user:req.session.user, message: "Success"})
         } else {
-            res.redirect('/')
+            res.json({message: "Not authenticated"})
         }
     }
 
     return {
         verifysignup: verifysignup,
         verifylogin: verifylogin,
+        verifyloginextension: verifyloginextension,
         signup: signup,
         login: login,
         checkauth: checkauth
