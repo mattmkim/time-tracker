@@ -42,9 +42,6 @@ app.get("/api/checkauth", authRoutes.checkauth)
 // data routes
 app.post("/api/fetchcategories", dataRoutes.fetchcategories)
 app.post("/api/createstudysession", dataRoutes.createstudysession)
-app.post("/api/fetchcurrentday", dataRoutes.fetchcurrentday)
-app.post("/api/initcurrentday", dataRoutes.initcurrentday)
-app.post("/api/updatecurrentday", dataRoutes.updatecurrentday)
 
 app.listen(port)
 console.log(`Listening on port ${port}`)

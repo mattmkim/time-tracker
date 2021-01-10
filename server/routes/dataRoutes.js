@@ -47,10 +47,7 @@ var routes = function(User, Study) {
 
     return {
         fetchcategories: fetchCategories,
-        createstudysession: createStudySession,
-        fetchcurrentday: fetchCurrentDay,
-        initcurrentday: initCurrentDay,
-        updatecurrentday: updateCurrentDay
+        createstudysession: createStudySession
     }
 }
 
