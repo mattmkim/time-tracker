@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(session({
     name: 'session',
-    secret: keys.secret
+    secret: 'abc'
 }))
 
 // define models
@@ -28,10 +28,12 @@ var User = require('./models/User')
 var Study = require('./models/Study')
 
 // define routes
+// Note: You can pass through the model classes through here (compared to mine)
 var authRoutes = require('./routes/authRoutes.js')(User)
 var dataRoutes = require('./routes/dataRoutes.js')(User, Study)
 
 // auth routes
+// Note: He defines each specific route here, compared to in the routes.js file for mine
 app.post("/api/verifysignup", authRoutes.verifysignup)
 app.post("/api/verifylogin", authRoutes.verifylogin)
 app.post("/api/verifyloginextension", authRoutes.verifyloginextension)
@@ -42,6 +44,7 @@ app.get("/api/checkauth", authRoutes.checkauth)
 // data routes
 app.post("/api/fetchcategories", dataRoutes.fetchcategories)
 app.post("/api/createstudysession", dataRoutes.createstudysession)
+app.post("/api/fetchstudysessions", dataRoutes.fetchstudysessions)
 
 app.listen(port)
 console.log(`Listening on port ${port}`)

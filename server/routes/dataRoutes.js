@@ -13,6 +13,38 @@ var routes = function(User, Study) {
         })
     }
 
+    // Fetch all study sessions (array of study session objects)
+    // Request body: email, date (optional)
+    var fetchStudySessions = async function(req, res) {
+        var email = req.body.email
+
+        // If date is in the request body, then only return study sessions on that date
+        if (req.body.date) {
+            var date = req.body.date
+            Study.find({email: email, date: date}, (err, resp) => {
+                if (err) {
+                    res.json({message: "error"})
+                } else if (resp.length == 0) {
+                    res.json({message: "User has no study sessions on that date OR User not found"})
+                } else {
+                    res.json({message: "Success", data: resp})
+                }
+            })
+
+        } else {
+            // If date not in request body, return all study sessions on that date
+            Study.find({email: email}, (err, resp) => {
+                if (err) {
+                    res.json({message: "error"})
+                } else if (resp.length == 0) {
+                    res.json({message: "User has no study sessions OR User not found"})
+                } else {
+                    res.json({message: "Success", data: resp})
+                }
+            })
+        }
+    }
+
     var createStudySession = async function(req, res) {
         var email = req.body.email
         var date = req.body.date
@@ -47,7 +79,8 @@ var routes = function(User, Study) {
 
     return {
         fetchcategories: fetchCategories,
-        createstudysession: createStudySession
+        createstudysession: createStudySession,
+        fetchstudysessions: fetchStudySessions
     }
 }
 

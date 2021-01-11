@@ -14,12 +14,12 @@ class Category extends Component {
     }
 
     setSwitchValue = () => {
+        // Turn off the switch if currently on and pressed
         if (this.state.switchValue) {
             this.setState({
                 switchValue: false
             })
-
-            // TODO: create new study session in local storage
+            // TODO: Upon turning switch off, create new study session in local storage
             chrome.storage.local.get(null, (items) => {
                 if (items.hasOwnProperty("categories")) {
                     var studyObj = {
@@ -78,6 +78,7 @@ class Category extends Component {
                 }
             }) 
         } else {
+            // Turn on switch (i.e. start studying) when the switch was off and pressed
             this.setState({
                 switchValue: true
             })
