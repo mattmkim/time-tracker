@@ -16,12 +16,14 @@ class Tracker extends Component {
             email: this.props.user
         }
        
+        // Gets categories from Chrome storage
         chrome.storage.local.get(null, (items) => {
             if (items.hasOwnProperty("categories")) {
                 var categoryObjs = []
                 var categories = items["categories"]
                 categories.forEach((category, index) => {
                     var categoryState = category + "State"
+                    // Information about the category to push (onto component state)
                     var categoryObj = {
                         category: category,
                         state: items[categoryState],
@@ -34,7 +36,8 @@ class Tracker extends Component {
                     categories: categoryObjs
                 })
             } else {
-                // day has not been initialized yet
+                // For the first study session of each day (day not initialized yet)
+                // Fetch categories from database! (message + categories)
                 Study.fetchCategories(userObj, (resp) => {
                     if (resp.message === "Success") {
                         var categoryObjs = []
@@ -59,11 +62,11 @@ class Tracker extends Component {
                             categories.push(category)
                             categoryObjs.push(categoryObj)
                         }
-
+                        // Store user's categories into Chrome local storage
                         chrome.storage.local.set({
                             categories: categories
                         })
-
+                        // Push categories into component state
                         this.setState({
                             categories: categoryObjs
                         })
@@ -115,7 +118,7 @@ class Tracker extends Component {
 
     }
 
-
+    // Returns category information for each category
     render() {
         return (
             <div>
