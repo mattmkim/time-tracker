@@ -3,6 +3,7 @@ import Auth from '../Middleware/Auth'
 //import Day from '../Middleware/Day'
 import Study from '../Middleware/Study'
 import DailyStudyTimeChart from './DailyStudyTimeChart';
+import DailyStudyTimestackedChart from './DailyStudyTimeStackedChart';
 
 class Home extends Component {
     constructor(props) {
@@ -59,6 +60,7 @@ class Home extends Component {
                 </h2>   
 
                 <DailyStudyTimeChart studySessions={this.state.studySessions}></DailyStudyTimeChart>
+                <DailyStudyTimestackedChart studySessions={this.state.studySessions}></DailyStudyTimestackedChart>
 
                 <h3>Logged Study Sessions</h3>
                 <table className="table">

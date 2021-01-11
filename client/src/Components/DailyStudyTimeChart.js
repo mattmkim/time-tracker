@@ -5,7 +5,6 @@ import axios from 'axios'
 export default class DailyStudyTimeChart extends Component { 
     constructor (props) {
         super(props)
-        console.log(props)
         this.studySessionsTable = this.studySessionsTable.bind(this)
         this.drawGraph = this.drawGraph.bind(this);
     }
