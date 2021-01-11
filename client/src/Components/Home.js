@@ -1,12 +1,15 @@
 import React, {Component} from 'react'
 import Auth from '../Middleware/Auth'
-import Day from '../Middleware/Day'
+//import Day from '../Middleware/Day'
+import Study from '../Middleware/Study'
+import DailyStudyTimeChart from './DailyStudyTimeChart';
 
 class Home extends Component {
     constructor(props) {
         super(props)
         this.state = {
             currUser: '',
+            studySessions: []
         }
     }
 
@@ -21,15 +24,59 @@ class Home extends Component {
                 this.setState({
                     currUser: resp.user
                 })
-                console.log("User has been authenticated!")
+
+                const reqBody = { "email" : resp.user }
+                // Get all the study sessions
+                Study.fetchStudySessions(reqBody, (resp) => {
+                    if (resp.message === 'Success') {
+                        this.setState({
+                            studySessions: resp.data
+                        })
+                    }
+                })                
             }    
+        })
+    }
+
+    studySessions() {
+        return this.state.studySessions.map(session => {
+            return (
+                <tr>
+                    <td> {session.category} </td>
+                    <td> {session.date} </td>
+                    <td> {session.startTime} </td>
+                    <td> {session.endTime} </td>
+                </tr>
+            )
         })
     }
 
     render() {
         return (
             <div>
-                Curr user: {this.state.currUser}
+                <h2>
+                Curr user: {this.state.currUser} 
+                </h2>   
+
+                <DailyStudyTimeChart studySessions={this.state.studySessions}></DailyStudyTimeChart>
+
+                <h3>Logged Study Sessions</h3>
+                <table className="table">
+                <thead className="thead-light">
+                    <tr>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { this.studySessions() }
+                </tbody>
+                </table>
+
+                
+
             </div>
         )
     }
