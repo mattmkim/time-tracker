@@ -9,7 +9,7 @@ import Login from './Components/Login'
 class App extends Component {
     render() {
         return (
-            <div>
+            <div style={{padding: '20px'}}>
                 <BrowserRouter>
                     <Route exact path = '/' component = {Landing}/>
                     <Route path = '/home' component = {Home}/>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Bar, defaults } from 'react-chartjs-2'
-import axios from 'axios'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"
 import * as scale from "d3-scale"
 
 export default class DailyStudyTimestackedChart extends Component { 
@@ -8,16 +9,32 @@ export default class DailyStudyTimestackedChart extends Component {
         super(props)
         this.studySessionsTable = this.studySessionsTable.bind(this)
         this.drawGraph = this.drawGraph.bind(this);
+
+        this.onChangeStartDate = this.onChangeStartDate.bind(this);
+        this.onChangeEndDate = this.onChangeEndDate.bind(this);
+        this.state = {
+            startDate: new Date('01/01/2020'),
+            endDate: new Date()
+        }
     }
     
 
     drawGraph() {
 
+        // Filter by date
+        let filteredSessions = [];
+        for (let session of this.props.studySessions) {
+            const date = new Date(session.date);
+            if (date >= this.state.startDate && date <= this.state.endDate) {
+                filteredSessions.push(session);
+            } 
+        }
+
         // Get total study time per day
         let map = new Map();
         // When adding to the map, use days array to store unique days
         let days = [];
-        for (let session of this.props.studySessions) {
+        for (let session of filteredSessions) {
 
             // Check if there is that category
             if (map.has(session.category)) {
@@ -85,8 +102,6 @@ export default class DailyStudyTimestackedChart extends Component {
             })
         }
 
-        console.log(datasets);
-
         
 
         // Return the bar graph
@@ -141,12 +156,38 @@ export default class DailyStudyTimestackedChart extends Component {
         })
     }
 
+    onChangeStartDate(date) {
+        this.setState({
+            startDate: date
+        })
+    }
+
+    onChangeEndDate(date) {
+        this.setState({
+            endDate: date
+        })
+    }
+
     render() {
         return (
             
             <div>
+            <h3>Start Date</h3>
+            <div>
+            <DatePicker
+                selected={this.state.startDate}
+                onChange={this.onChangeStartDate}
+            />
+            </div>
+            <h3>End Date</h3>
+            <div>
+            <DatePicker
+                selected={this.state.endDate}
+                onChange={this.onChangeEndDate}
+            />
+            </div>
             <h3>Study Sessions by Day (by Category)</h3>
-
+                
                 {this.drawGraph()}
             </div>
             )

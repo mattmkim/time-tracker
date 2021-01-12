@@ -34,7 +34,9 @@ class Home extends Component {
                             studySessions: resp.data
                         })
                     }
-                })                
+                })
+                
+               
             }    
         })
     }
@@ -59,7 +61,7 @@ class Home extends Component {
                 Curr user: {this.state.currUser} 
                 </h2>   
 
-                <DailyStudyTimeChart studySessions={this.state.studySessions}></DailyStudyTimeChart>
+                {/* <DailyStudyTimeChart studySessions={this.state.studySessions}></DailyStudyTimeChart> */}
                 <DailyStudyTimestackedChart studySessions={this.state.studySessions}></DailyStudyTimestackedChart>
 
                 <h3>Logged Study Sessions</h3>
